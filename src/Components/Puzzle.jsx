@@ -6,11 +6,11 @@ import lemon from "../assets/lemon.svg";
 import joker from "../assets/joker.svg";
 import { creteIntialState } from "../utils/CreatePuzzle";
 
-const intialStateStatus = Array.from({ length: 5 }, () => Array(5).fill(false));
-
 const Puzzle = () => {
   const [puzzle, setPuzzle] = useState(creteIntialState);
-  const [status, setStatus] = useState(intialStateStatus);
+  const [status, setStatus] = useState(
+    Array.from({ length: 5 }, () => Array(5).fill(false))
+  );
   const [turn, setTurn] = useState(1);
   const [win, setWin] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -108,9 +108,8 @@ const Puzzle = () => {
       </div>
       <button
         onClick={() => {
-          const intialState = creteIntialState();
-          setPuzzle([...intialState]);
-          setStatus([...intialStateStatus]);
+          setPuzzle(creteIntialState());
+          setStatus(Array.from({ length: 5 }, () => Array(5).fill(false)));
           setWin(false);
           setTurn(1);
           setLoading(false);
