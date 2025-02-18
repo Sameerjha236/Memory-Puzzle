@@ -1,4 +1,9 @@
 import { useRef, useState } from "react";
+import apple from "../assets/apple.svg";
+import carrot from "../assets/carrot.svg";
+import grape from "../assets/grape.svg";
+import lemon from "../assets/lemon.svg";
+import joker from "../assets/joker.svg";
 
 const intialStatePuzzle = [
   ["w", "x", "y", "z", "w"],
@@ -22,8 +27,6 @@ const Puzzle = () => {
     const curr = puzzle[r][c];
     const prev = puzzle[previous.current.r][previous.current.c];
 
-    console.log({ prev, curr }, prev === curr);
-
     if (prev === curr) {
       setTurn((curr) => curr + 1);
       previous.current = {};
@@ -37,12 +40,21 @@ const Puzzle = () => {
 
   const toggleHandler = (r, c) => {
     if (loading) return;
+    if (status[r][c]) return;
     var tempStatus = [...status];
     tempStatus[r][c] = true;
     setStatus(tempStatus);
     if (turn === 26) {
       setWin(true);
       return;
+    }
+    if (puzzle[r][c] === "o") {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        tempStatus[r][c] = false;
+        setStatus(tempStatus);
+      }, [500]);
     }
 
     if (turn % 2 === 1) {
@@ -58,6 +70,24 @@ const Puzzle = () => {
     }
   };
 
+  // eslint-disable-next-line react/prop-types
+  const ImageRender = ({ val }) => {
+    switch (val) {
+      case "w":
+        return <img className="cellImage" src={apple} alt="W" />;
+      case "x":
+        return <img className="cellImage" src={lemon} alt="X" />;
+      case "y":
+        return <img className="cellImage" src={grape} alt="Y" />;
+      case "z":
+        return <img className="cellImage" src={carrot} alt="Z" />;
+      case "o":
+        return <img className="cellImage" src={joker} alt="Z" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
       {win && <h3>You Win</h3>}
@@ -68,11 +98,13 @@ const Puzzle = () => {
               {row.map((col, c) => {
                 return (
                   <p
-                    className="cell"
+                    className={`cell ${
+                      status[r][c] ? "flipped" : "notFlipped"
+                    }`}
                     key={c}
                     onClick={() => toggleHandler(r, c)}
                   >
-                    {status[r][c] ? col : "H"}
+                    {status[r][c] ? <ImageRender val={puzzle[r][c]} /> : ""}
                   </p>
                 );
               })}
@@ -83,10 +115,13 @@ const Puzzle = () => {
       <button
         onClick={() => {
           setPuzzle([...intialStatePuzzle]);
-          setStatus([...intialStateStatus]);
+          setStatus(Array.from({ length: 5 }, () => Array(5).fill(false)));
           setWin(false);
           setTurn(1);
+          setLoading(false);
+          previous.current = {};
         }}
+        className="ResetBtn"
       >
         Reset
       </button>
