@@ -2,23 +2,29 @@
   background-color: #dcd7c9;
   color: #d84040;
 }
+
 .Hero {
+  width: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
+  padding: 20px;
 }
+
 .PuzzleWrapper {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
   width: fit-content;
+  max-width: 100%;
   margin: auto;
   padding: 15px;
   background-color: #402e7a;
   border-radius: 10px;
 }
 
+/* Individual grid cells */
 .cell {
   display: flex;
   justify-content: center;
@@ -33,6 +39,7 @@
   transition: 0.1s ease-in-out;
   cursor: pointer;
 }
+
 .notFlipped {
   background-color: #4c3bcf;
 }
@@ -60,7 +67,56 @@
   margin-top: 1rem;
   transition: 0.5s ease-in-out background-color;
 }
+
 .ResetBtn:hover {
   cursor: pointer;
   background-color: #003161;
+}
+
+@media (max-width: 600px) {
+  .PuzzleWrapper {
+    gap: 5px;
+    padding: 10px;
+  }
+
+  .cell {
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+  }
+
+  .cellImage {
+    width: 50px;
+    height: 50px;
+  }
+
+  .ResetBtn {
+    height: 60px;
+    width: 120px;
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .PuzzleWrapper {
+    gap: 4px;
+    padding: 8px;
+  }
+
+  .cell {
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+  }
+
+  .cellImage {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ResetBtn {
+    height: 50px;
+    width: 100px;
+    font-size: 1.2rem;
+  }
 }

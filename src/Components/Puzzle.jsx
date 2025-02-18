@@ -4,19 +4,12 @@ import carrot from "../assets/carrot.svg";
 import grape from "../assets/grape.svg";
 import lemon from "../assets/lemon.svg";
 import joker from "../assets/joker.svg";
-
-const intialStatePuzzle = [
-  ["w", "x", "y", "z", "w"],
-  ["x", "y", "z", "w", "x"],
-  ["y", "z", "w", "x", "y"],
-  ["z", "w", "x", "y", "z"],
-  ["w", "x", "y", "z", "o"],
-];
+import { creteIntialState } from "../utils/CreatePuzzle";
 
 const intialStateStatus = Array.from({ length: 5 }, () => Array(5).fill(false));
 
 const Puzzle = () => {
-  const [puzzle, setPuzzle] = useState(intialStatePuzzle);
+  const [puzzle, setPuzzle] = useState(creteIntialState);
   const [status, setStatus] = useState(intialStateStatus);
   const [turn, setTurn] = useState(1);
   const [win, setWin] = useState(false);
@@ -43,11 +36,12 @@ const Puzzle = () => {
     if (status[r][c]) return;
     var tempStatus = [...status];
     tempStatus[r][c] = true;
-    setStatus(tempStatus);
-    if (turn === 26) {
+    if (turn === 25) {
       setWin(true);
+      setStatus(tempStatus);
       return;
     }
+    setStatus(tempStatus);
     if (puzzle[r][c] === "o") {
       setLoading(true);
       setTimeout(() => {
@@ -95,7 +89,7 @@ const Puzzle = () => {
         {puzzle.map((row, r) => {
           return (
             <div key={r}>
-              {row.map((col, c) => {
+              {row.map((val, c) => {
                 return (
                   <p
                     className={`cell ${
@@ -104,7 +98,7 @@ const Puzzle = () => {
                     key={c}
                     onClick={() => toggleHandler(r, c)}
                   >
-                    {status[r][c] ? <ImageRender val={puzzle[r][c]} /> : ""}
+                    {status[r][c] ? <ImageRender val={val} /> : ""}
                   </p>
                 );
               })}
@@ -114,8 +108,9 @@ const Puzzle = () => {
       </div>
       <button
         onClick={() => {
-          setPuzzle([...intialStatePuzzle]);
-          setStatus(Array.from({ length: 5 }, () => Array(5).fill(false)));
+          const intialState = creteIntialState();
+          setPuzzle([...intialState]);
+          setStatus([...intialStateStatus]);
           setWin(false);
           setTurn(1);
           setLoading(false);
